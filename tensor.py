@@ -6,7 +6,7 @@ def model_factory(x_train, y_train):
     # Case: Model exist
     path = "./my_model.h5"
     if os.path.exists(path):
-        model = tf.keras.models.load_model('my_model.h5')
+        model = tf.keras.models.load_model(path)
         return model
 
     # Model create 
@@ -37,3 +37,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
