@@ -4,14 +4,21 @@ import h5py
 import os
 from PIL import Image
 
+def load_img(img_path):
+    if os.path.exists(img_path):
+        return Image.open(img_path)
+    else:
+        print('画像が見つからないよ！')
+        return
+
 def model_factory(x_train, y_train):
-    # Case: Model exist
+    # モデル作成済みであれば使用
     path = "./my_model.h5"
     if os.path.exists(path):
         model = tf.keras.models.load_model(path)
         return model
 
-    # Model create 
+    # モデルがない場合は作成
     model = tf.keras.models.Sequential([
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(512, activation=tf.nn.relu),
@@ -45,7 +52,10 @@ def print_result(result):
         print('{}| {:.8f}'.format(i, float(result[0][i])))
     print('prediction：{}'.format(np.argmax(result)))
 
-def main():
+def main(img_path):
+    input_img = load_img(img_path)
+    img_data  = img_preprocessing(input_img)
+
     mnist = tf.keras.datasets.mnist
 
     (x_train, y_train),(x_test, y_test) = mnist.load_data()
@@ -56,12 +66,14 @@ def main():
     score = model.evaluate(x_test, y_test)
     print_score(metrics_names = model.metrics_names, score = score)
 
-    img_path  = "images/three.png"
-    input_img = Image.open(img_path)
-    img_data  = img_preprocessing(input_img)
-
     result = model.predict(img_data)
     print_result(result)
 
 if __name__ == '__main__':
-    main()
+    import sys
+    if len(sys.argv) == 1:
+        print('識別したい画像を入力してください')
+    elif len(sys.argv) > 2:
+        print('画像は一つしか入力できないよ ><')
+    else:
+        main(img_path = sys.argv[1])
