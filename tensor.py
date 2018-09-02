@@ -33,7 +33,7 @@ def main():
     model = model_factory(x_train, y_train)
     score = model.evaluate(x_test, y_test)
     for i in range(len(model.metrics_names)):
-        print('{f}: {f}', format(model.metrics_names[i], score[i]))
+        print('{}: {}'.format(model.metrics_names[i], str(score[i])))
 
 if __name__ == '__main__':
     main()
