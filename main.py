@@ -54,6 +54,7 @@ def print_result(result):
 
 def main(img_path):
     input_img = load_img(img_path)
+    if not input_img: return 
     img_data  = img_preprocessing(input_img)
 
     mnist = tf.keras.datasets.mnist
