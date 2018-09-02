@@ -1,6 +1,8 @@
 import tensorflow as tf
+import numpy as np
 import h5py
 import os
+from PIL import Image
 
 def model_factory(x_train, y_train):
     # Case: Model exist
@@ -35,6 +37,13 @@ def main():
     for i in range(len(model.metrics_names)):
         print('{}: {}'.format(model.metrics_names[i], str(score[i])))
 
+    input_img = Image.open("images/three.png")
+    input_img = input_img.convert('L')
+    predict   = 1.0 - np.asarray(input_img, dtype="float64") / 255 # mnistは黒背景
+    predict   = np.array([predict])
+    res = model.predict(predict)
+    print(res)
+    print(np.argmax(res))
+
 if __name__ == '__main__':
     main()
-    
